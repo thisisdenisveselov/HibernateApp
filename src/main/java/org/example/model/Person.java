@@ -1,27 +1,26 @@
 package org.example.model;
 
 import javax.persistence.*;
+import java.util.List;
 
-@Entity //class, that is connected with DB.
-// Class with this annotation must have empty constructor and at least one field with "id" annotation
-@Table(name = "Person")
+@Entity
+@Table(name = "person")
 public class Person {
 
-    @Id  //PRIMARY KEY column
+    @Id
     @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)  //Hibernate doesn't care about this column. It is generated on DB side
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
     @Column(name = "name")
     private String name;
+
     @Column(name = "age")
     private int age;
 
+    @OneToMany(mappedBy = "owner")
+    private List<Item> items;
     public Person() {
-    }
-
-    public Person(String name, int age) {
-        this.name = name;
-        this.age = age;
     }
 
     public int getId() {
@@ -48,7 +47,25 @@ public class Person {
         this.age = age;
     }
 
+    public Person(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    public List<Item> getItems() {
+        return items;
+    }
+
+    public void setItems(List<Item> items) {
+        this.items = items;
+    }
+
+    @Override
     public String toString() {
-        return this.name + ", " + this.age;
+        return "Person{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", age=" + age +
+                '}';
     }
 }
