@@ -1,9 +1,6 @@
 package org.example.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity //class, that is connected with DB.
 // Class with this annotation must have empty constructor and at least one field with "id" annotation
@@ -12,6 +9,7 @@ public class Person {
 
     @Id  //PRIMARY KEY column
     @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)  //Hibernate doesn't care about this column. It is generated on DB side
     private int id;
     @Column(name = "name")
     private String name;
@@ -21,8 +19,7 @@ public class Person {
     public Person() {
     }
 
-    public Person(int id, String name, int age) {
-        this.id = id;
+    public Person(String name, int age) {
         this.name = name;
         this.age = age;
     }
@@ -49,5 +46,9 @@ public class Person {
 
     public void setAge(int age) {
         this.age = age;
+    }
+
+    public String toString() {
+        return this.name + ", " + this.age;
     }
 }
