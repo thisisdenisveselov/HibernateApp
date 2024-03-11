@@ -26,15 +26,12 @@ public class App
         try {
             session.beginTransaction();
 
-            Person person = session.get(Person.class, 4);
-            Item item = session.get(Item.class, 1);
-            //cache
-            item.getOwner().getItems().remove(item);
+            Person person = new Person("Test cascading", 30);
+            person.addItem(new Item("item 1"));
+            person.addItem(new Item("item 2"));
+            person.addItem(new Item("item 3"));
 
-            //SQL
-            item.setOwner(person);
-            //cache
-            person.getItems().add(item);
+            session.save(person);
 
             session.getTransaction().commit();
 
