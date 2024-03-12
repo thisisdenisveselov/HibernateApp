@@ -3,12 +3,10 @@ package org.example.model;
 import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
-@Table(name = "Person")
-public class Person {
+@Table(name = "Principal")
+public class Principal {
 
     @Id
     @Column(name = "id")
@@ -21,15 +19,13 @@ public class Person {
     @Column(name = "age")
     private int age;
 
-    @OneToOne(mappedBy = "person") //not owning side
+    @OneToOne(mappedBy = "principal")
     @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
-    private Passport passport;
+    private School school;
 
+    public Principal(){}
 
-    public Person() {
-    }
-
-    public Person(String name, int age) {
+    public Principal(String name, int age) {
         this.name = name;
         this.age = age;
     }
@@ -58,21 +54,22 @@ public class Person {
         this.age = age;
     }
 
-    public Passport getPassport() {
-        return passport;
+    public School getSchool() {
+        return school;
     }
 
-    public void setPassport(Passport passport) {
-        this.passport = passport;
-        passport.setPerson(this);
+    public void setSchool(School school) {
+        this.school = school;
+        school.setPrincipal(this);
     }
 
     @Override
     public String toString() {
-        return "Person{" +
+        return "Principal{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", age=" + age +
+                ", age='" + age + '\'' +
+                ", school=" + school +
                 '}';
     }
 }
