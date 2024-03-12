@@ -2,6 +2,7 @@ package org.example;
 
 import org.example.model.Item;
 import org.example.model.Person;
+import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
@@ -26,17 +27,28 @@ public class App
         try {
             session.beginTransaction();
 
-            Person person = session.get(Person.class, 4);
-            Item item = session.get(Item.class, 1);
-            //cache
-            item.getOwner().getItems().remove(item);
+            Person person = session.get(Person.class, 1);
 
-            //SQL
-            item.setOwner(person);
-            //cache
-            person.getItems().add(item);
+            System.out.println("Got person");
 
             session.getTransaction().commit();
+            //session.close() - Hibernate call it automatically when we use commit()
+
+            System.out.println("session closed");
+
+            session = sessionFactory.getCurrentSession();
+            session.beginTransaction();
+
+            System.out.println("inside 2 transaction");
+
+            List<Item> items = session.createQuery("select i from Item i where i.owner.id=:personId", Item.class)
+                    .setParameter("personId", person.getId()).getResultList();
+
+            System.out.println(items);
+
+            session.getTransaction().commit();
+
+            System.out.println("outside 2 session");
 
         } finally {
             sessionFactory.close();
